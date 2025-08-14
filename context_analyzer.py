@@ -9,7 +9,6 @@ to the LLM for better command generation.
 import os
 import subprocess
 import platform
-import locale
 from pathlib import Path
 from config import Config
 from i18n import t
@@ -107,4 +106,3 @@ class ContextAnalyzer:
         except (OSError, IOError):
             pass
         return []
-

@@ -77,7 +77,10 @@ class CmdHelper:
 @click.option('--lang', type=click.Choice(['es', 'en', 'auto']), default='auto',
               help='Set language (es=Spanish, en=English, auto=detect)')
 def main(request, version, lang):
-    """Cmd Helper - Intelligent command line assistant / Asistente inteligente para línea de comandos"""
+    """
+    Cmd Helper - Intelligent command line assistant / 
+    Asistente inteligente para línea de comandos
+    """
 
     # Configurar idioma si se especifica
     if lang != 'auto':
@@ -112,4 +115,3 @@ def main(request, version, lang):
 
 if __name__ == '__main__':
     main()
-

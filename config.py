@@ -34,4 +34,3 @@ class Config:
         '.git', 'node_modules', '__pycache__', '.venv',
         'venv', '.ssh', '/proc', '/sys', '/dev'
     ]
-

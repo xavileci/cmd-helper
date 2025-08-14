@@ -33,7 +33,8 @@ class MCPServer:
 
         # Prompt del sistema optimizado para comandos de shell
         if current_lang == 'en':
-            self.system_prompt = """You are an expert cross-platform command line assistant (Linux, macOS, Windows).
+            self.system_prompt = """You are an expert cross-platform command line assistant 
+(Linux, macOS, Windows).
 
 IMPORTANT RULES:
 1. Respond ONLY with safe executable commands
@@ -55,7 +56,8 @@ DANGER: NO
 
 Current system context:"""
         else:
-            self.system_prompt = """Eres un asistente experto en línea de comandos multiplataforma (Linux, macOS, Windows).
+            self.system_prompt = """Eres un asistente experto en línea de comandos 
+multiplataforma (Linux, macOS, Windows).
 
 REGLAS IMPORTANTES:
 1. Responde SOLO con comandos ejecutables seguros
@@ -117,7 +119,7 @@ Contexto actual del sistema:"""
             is_dangerous = False
 
             # Detectar idioma para parsear correctamente
-            translator = get_translator()
+            # translator = get_translator()  # No se usa actualmente
 
             # Palabras clave según el idioma
             command_keywords = ['COMMAND:', 'COMANDO:']
