@@ -81,4 +81,3 @@ class CommandHandler:
         except OSError as e:
             print(Fore.RED + t('security.execution_error') + " " + str(e) + Style.RESET_ALL)
             return {'success': False, 'error': str(e)}
-
