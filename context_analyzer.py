@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import os
 import subprocess
 import json
 from pathlib import Path
 from config import Config
+from i18n import t
 
 class ContextAnalyzer:
     """Analiza el contexto actual del sistema para enviar a la LLM"""
@@ -55,7 +57,7 @@ class ContextAnalyzer:
             
             return files
         except Exception as e:
-            return [{'error': f'Cannot read directory: {str(e)}'}]
+            return [{'error': t('context.directory_error') + " " + str(e)}]
     
     def _get_git_info(self):
         """Información básica de git si está disponible"""

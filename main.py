@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Cmd Helper - Asistente inteligente para línea de comandos
 Uso: python main.py "tu petición en lenguaje natural"
@@ -10,6 +11,7 @@ from colorama import Fore, Style, init
 from mcp_server import MCPServer
 from command_handler import CommandHandler
 from config import Config
+from i18n import t, get_translator
 
 # Inicializar colorama
 init(autoreset=True)
@@ -19,30 +21,38 @@ class CmdHelper:
     
     def __init__(self):
         self.config = Config()
+        
+        # Inicializar traductor según configuración
+        if self.config.LANGUAGE == 'auto':
+            self.translator = get_translator()  # Auto-detectar
+        else:
+            self.translator = get_translator(self.config.LANGUAGE)
+        
         self.mcp_server = MCPServer()
         self.command_handler = CommandHandler()
     
     def validate_setup(self):
         """Valida que la configuración esté correcta"""
         if not self.config.GEMINI_API_KEY:
-            print(f"{Fore.RED}Error: No se encontró GEMINI_API_KEY{Style.RESET_ALL}")
-            print("Configura tu API key:")
-            print("export GEMINI_API_KEY='tu-api-key-aqui'")
-            print("O crea un archivo .env con: GEMINI_API_KEY=tu-api-key-aqui")
+            api_key_msg = t('config.api_key_not_found')
+            print(Fore.RED + api_key_msg + Style.RESET_ALL)
+            print(t('config.api_key_setup'))
+            print(t('config.export_command'))
+            print(t('config.env_file'))
             return False
         return True
     
     def process_request(self, user_input):
         """Procesa una petición del usuario"""
-        print(f"{Fore.BLUE}🤖 Analizando tu petición...{Style.RESET_ALL}")
+        print(Fore.BLUE + t('messages.analyzing_request') + Style.RESET_ALL)
         
-        # Generar comando usando MCP + OpenAI
+        # Generar comando usando MCP + Gemini
         result = self.mcp_server.generate_command(user_input)
         
         if not result['command']:
-            print(f"{Fore.RED}No pude generar un comando para tu petición.{Style.RESET_ALL}")
+            print(Fore.RED + t('messages.no_command_generated') + Style.RESET_ALL)
             if result['explanation']:
-                print(f"Razón: {result['explanation']}")
+                print(t('messages.reason') + " " + result['explanation'])
             return
         
         # Mostrar resultado y pedir confirmación
@@ -51,26 +61,32 @@ class CmdHelper:
             execution_result = self.command_handler.execute_command(result['command'])
             
             if execution_result['success']:
-                print(f"\n{Fore.GREEN}✅ Comando ejecutado exitosamente{Style.RESET_ALL}")
+                print("\n" + Fore.GREEN + t('messages.command_executed_successfully') + Style.RESET_ALL)
             else:
-                print(f"\n{Fore.RED}❌ Error en la ejecución{Style.RESET_ALL}")
+                print("\n" + Fore.RED + t('messages.execution_error') + Style.RESET_ALL)
         else:
-            print(f"{Fore.YELLOW}Operación cancelada{Style.RESET_ALL}")
+            print(Fore.YELLOW + t('messages.operation_cancelled') + Style.RESET_ALL)
 
 @click.command()
 @click.argument('request', required=True)
-@click.option('--version', is_flag=True, help='Mostrar versión')
-def main(request, version):
-    """Cmd Helper - Asistente inteligente para línea de comandos"""
+@click.option('--version', is_flag=True, help='Show version / Mostrar versión')
+@click.option('--lang', type=click.Choice(['es', 'en', 'auto']), default='auto', 
+              help='Set language (es=Spanish, en=English, auto=detect)')
+def main(request, version, lang):
+    """Cmd Helper - Intelligent command line assistant / Asistente inteligente para línea de comandos"""
+    
+    # Configurar idioma si se especifica
+    if lang != 'auto':
+        get_translator(lang)
     
     if version:
-        print("Cmd Helper v1.0.0")
+        print(t('app.version'))
         return
     
     # Mostrar banner
-    print(f"{Fore.CYAN}{'='*50}")
-    print(f"{Fore.CYAN}🚀 Cmd Helper - Asistente de Comandos IA")
-    print(f"{Fore.CYAN}{'='*50}{Style.RESET_ALL}")
+    print(Fore.CYAN + "=" * 50)
+    print(Fore.CYAN + "🚀 " + t('app.name'))
+    print(Fore.CYAN + "=" * 50 + Style.RESET_ALL)
     
     # Inicializar aplicación
     app = CmdHelper()
@@ -83,9 +99,9 @@ def main(request, version):
     try:
         app.process_request(request)
     except KeyboardInterrupt:
-        print(f"\n{Fore.YELLOW}Operación cancelada por el usuario{Style.RESET_ALL}")
+        print("\n" + Fore.YELLOW + t('messages.operation_cancelled_by_user') + Style.RESET_ALL)
     except Exception as e:
-        print(f"\n{Fore.RED}Error inesperado: {str(e)}{Style.RESET_ALL}")
+        print("\n" + Fore.RED + t('messages.unexpected_error') + " " + str(e) + Style.RESET_ALL)
 
 if __name__ == '__main__':
     main()

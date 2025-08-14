@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from dotenv import load_dotenv
 
@@ -8,6 +9,9 @@ class Config:
     MODEL_NAME = "gemini-1.5-flash"  # Modelo gratuito y rápido
     MAX_TOKENS = 1000
     TEMPERATURE = 0.1  # Respuestas más deterministas para comandos
+    
+    # Configuración de idioma
+    LANGUAGE = os.getenv('CMD_HELPER_LANG', 'auto')  # 'auto', 'es', 'en'
     
     # Comandos peligrosos que siempre requieren confirmación extra
     DANGEROUS_COMMANDS = [

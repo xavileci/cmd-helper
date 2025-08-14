@@ -4,6 +4,16 @@ A cross-platform tool that helps you generate and execute shell commands using n
 
 ## Installation
 
+### Quick Setup
+
+Run the interactive setup script:
+
+```bash
+python setup.py
+```
+
+### Manual Setup
+
 1. Clone or download the project
 2. Install dependencies:
 
@@ -21,9 +31,12 @@ A cross-platform tool that helps you generate and execute shell commands using n
 
    ```env
    GEMINI_API_KEY=your-api-key-here
+   CMD_HELPER_LANG=auto  # auto, es, en
    ```
 
 ## Usage
+
+### Basic Usage
 
 ```bash
 python main.py "list python files modified today"
@@ -32,14 +45,44 @@ python main.py "show disk space"
 python main.py "compress backup folder"
 ```
 
+### Language Options
+
+```bash
+# Auto-detect language (default)
+python main.py "list files"
+
+# Force English
+python main.py --lang en "list files"
+
+# Force Spanish  
+python main.py --lang es "listar archivos"
+```
+
 ## Features
 
-- ✅ Cross-platform (Linux, macOS, Windows)
-- ✅ Intelligent context analysis
-- ✅ Confirmation before execution
-- ✅ Dangerous command detection
-- ✅ Git integration
-- ✅ Friendly colors and formatting
+- ✅ **Cross-platform** (Linux, macOS, Windows)
+- ✅ **Multilingual support** (Spanish, English with auto-detection)
+- ✅ **Intelligent context analysis**
+- ✅ **Confirmation before execution**
+- ✅ **Dangerous command detection**
+- ✅ **Git integration**
+- ✅ **Friendly colors and formatting**
+
+## Language Support
+
+The application automatically detects your system language and supports:
+
+- **Spanish (es)**: Full interface and prompts in Spanish
+- **English (en)**: Full interface and prompts in English  
+- **Auto-detection**: Automatically detects system language
+
+### Configuration Options
+
+| Method | Description |
+|--------|-------------|
+| Command line | `--lang es/en/auto` |
+| Environment variable | `CMD_HELPER_LANG=es/en/auto` |
+| Auto-detection | Detects from system locale (default) |
 
 ## Example Commands
 

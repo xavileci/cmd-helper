@@ -1,0 +1,46 @@
+{
+  "app": {
+    "name": "Cmd Helper - Asistente de Comandos IA",
+    "description": "Asistente inteligente para línea de comandos",
+    "version": "Cmd Helper v1.0.0"
+  },
+  "messages": {
+    "analyzing_request": "🤖 Analizando tu petición...",
+    "no_command_generated": "No pude generar un comando para tu petición.",
+    "reason": "Razón:",
+    "operation_cancelled": "Operación cancelada",
+    "command_executed_successfully": "✅ Comando ejecutado exitosamente",
+    "execution_error": "❌ Error en la ejecución",
+    "operation_cancelled_by_user": "Operación cancelada por el usuario",
+    "unexpected_error": "Error inesperado:"
+  },
+  "commands": {
+    "suggested_command": "Comando sugerido:",
+    "explanation": "Explicación:",
+    "execute_command": "¿Ejecutar este comando? (y/N):",
+    "executing": "Ejecutando:",
+    "output": "Salida:",
+    "error": "Error:"
+  },
+  "security": {
+    "warning": "⚠️  ADVERTENCIA: Este comando puede ser peligroso",
+    "confirm_dangerous": "¿Estás SEGURO que quieres ejecutar este comando? (escribir 'SI'):",
+    "timeout_error": "Error: El comando excedió el tiempo límite (30s)",
+    "execution_error": "Error ejecutando comando:"
+  },
+  "config": {
+    "api_key_not_found": "Error: No se encontró GEMINI_API_KEY",
+    "api_key_setup": "Configura tu API key:",
+    "export_command": "export GEMINI_API_KEY='tu-api-key-aqui'",
+    "env_file": "O crea un archivo .env con: GEMINI_API_KEY=tu-api-key-aqui"
+  },
+  "context": {
+    "directory_error": "No se puede leer el directorio:",
+    "ai_generated_command": "Comando generado por IA",
+    "gemini_connection_error": "Error conectando con Gemini:",
+    "response_processing_error": "Error procesando respuesta:"
+  },
+  "help": {
+    "show_version": "Mostrar versión"
+  }
+}

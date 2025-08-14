@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 import json
 import google.generativeai as genai
 from config import Config
 from context_analyzer import ContextAnalyzer
+from i18n import t, get_translator
 
 class MCPServer:
     """Servidor MCP que se comunica con Google Gemini"""
@@ -12,8 +14,40 @@ class MCPServer:
         self.model = genai.GenerativeModel(self.config.MODEL_NAME)
         self.context_analyzer = ContextAnalyzer()
         
+        # Inicializar traductor según configuración
+        if self.config.LANGUAGE == 'auto':
+            translator = get_translator()  # Auto-detectar
+        else:
+            translator = get_translator(self.config.LANGUAGE)
+        
+        # Obtener el idioma actual del traductor
+        current_lang = translator.language
+        
         # Prompt del sistema optimizado para comandos de shell
-        self.system_prompt = """Eres un asistente experto en línea de comandos multiplataforma (Linux, macOS, Windows).
+        if current_lang == 'en':
+            self.system_prompt = """You are an expert cross-platform command line assistant (Linux, macOS, Windows).
+
+IMPORTANT RULES:
+1. Respond ONLY with safe executable commands
+2. Briefly explain what each command does
+3. Prioritize simple and standard commands
+4. If you detect something dangerous, warn clearly
+5. Adapt commands according to detected platform
+6. If unsure, suggest the safest command
+
+MANDATORY RESPONSE FORMAT:
+COMMAND: [exact command here]
+EXPLANATION: [what it does in 1-2 lines]
+DANGER: [YES/NO and why if dangerous]
+
+Example:
+COMMAND: find . -name "*.py" -type f
+EXPLANATION: Finds all files with .py extension in current directory and subdirectories
+DANGER: NO
+
+Current system context:"""
+        else:
+            self.system_prompt = """Eres un asistente experto en línea de comandos multiplataforma (Linux, macOS, Windows).
 
 REGLAS IMPORTANTES:
 1. Responde SOLO con comandos ejecutables seguros
@@ -61,26 +95,49 @@ Contexto actual del sistema:"""
         except Exception as e:
             return {
                 'command': None,
-                'explanation': f'Error conectando con Gemini: {str(e)}',
+                'explanation': t("context.gemini_connection_error") + " " + str(e),
                 'is_dangerous': False
             }
     
     def _parse_response(self, response_text):
-        """Parsea la respuesta de OpenAI"""
+        """Parsea la respuesta de Gemini"""
         try:
             lines = response_text.strip().split('\n')
             command = None
             explanation = ""
             is_dangerous = False
             
+            # Detectar idioma para parsear correctamente
+            translator = get_translator()
+            is_english = translator.language == 'en'
+            
+            # Palabras clave según el idioma
+            command_keywords = ['COMMAND:', 'COMANDO:']
+            explanation_keywords = ['EXPLANATION:', 'EXPLICACIÓN:']
+            danger_keywords = ['DANGER:', 'PELIGRO:']
+            
             for line in lines:
-                if line.startswith('COMANDO:'):
-                    command = line.replace('COMANDO:', '').strip()
-                elif line.startswith('EXPLICACIÓN:'):
-                    explanation = line.replace('EXPLICACIÓN:', '').strip()
-                elif line.startswith('PELIGRO:'):
-                    danger_text = line.replace('PELIGRO:', '').strip().upper()
-                    is_dangerous = danger_text.startswith('SI')
+                # Comando
+                if any(keyword in line for keyword in command_keywords):
+                    for keyword in command_keywords:
+                        if keyword in line:
+                            command = line.replace(keyword, '').strip()
+                            break
+                
+                # Explicación
+                elif any(keyword in line for keyword in explanation_keywords):
+                    for keyword in explanation_keywords:
+                        if keyword in line:
+                            explanation = line.replace(keyword, '').strip()
+                            break
+                
+                # Peligro
+                elif any(keyword in line for keyword in danger_keywords):
+                    for keyword in danger_keywords:
+                        if keyword in line:
+                            danger_text = line.replace(keyword, '').strip().upper()
+                            is_dangerous = danger_text.startswith('YES') or danger_text.startswith('SI')
+                            break
             
             # Si no encontramos formato estructurado, usar respuesta completa
             if not command:
@@ -88,7 +145,7 @@ Contexto actual del sistema:"""
                 for line in lines:
                     if line.strip() and not line.startswith('#'):
                         command = line.strip()
-                        explanation = "Comando generado por IA"
+                        explanation = t('context.ai_generated_command')
                         break
             
             return {
@@ -100,7 +157,7 @@ Contexto actual del sistema:"""
         except Exception as e:
             return {
                 'command': None,
-                'explanation': f'Error procesando respuesta: {str(e)}',
+                'explanation': t("context.response_processing_error") + " " + str(e),
                 'is_dangerous': False
             }
 

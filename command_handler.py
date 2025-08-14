@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import subprocess
 import shlex
 import sys
 from colorama import Fore, Style, init
 from config import Config
+from i18n import t
 
 # Inicializar colorama para multiplataforma
 init(autoreset=True)
@@ -20,25 +22,26 @@ class CommandHandler:
     
     def confirm_execution(self, command, explanation=""):
         """Pide confirmación al usuario antes de ejecutar"""
-        print(f"\n{Fore.CYAN}Comando sugerido:{Style.RESET_ALL}")
-        print(f"{Fore.WHITE}{command}{Style.RESET_ALL}")
+        print("\n" + Fore.CYAN + t('commands.suggested_command') + Style.RESET_ALL)
+        print(Fore.WHITE + command + Style.RESET_ALL)
         
         if explanation:
-            print(f"\n{Fore.GREEN}Explicación:{Style.RESET_ALL}")
-            print(f"{explanation}")
+            print("\n" + Fore.GREEN + t('commands.explanation') + Style.RESET_ALL)
+            print(explanation)
         
         if self.is_command_dangerous(command):
-            print(f"\n{Fore.RED}⚠️  ADVERTENCIA: Este comando puede ser peligroso{Style.RESET_ALL}")
-            confirmation = input(f"\n¿Estás SEGURO que quieres ejecutar este comando? (escribir 'SI'): ")
-            return confirmation == "SI"
+            print("\n" + Fore.RED + t('security.warning') + Style.RESET_ALL)
+            confirmation = input("\n" + t('security.confirm_dangerous') + " ")
+            # Aceptar tanto "SI" (español) como "YES" (inglés)
+            return confirmation.upper() in ["SI", "YES"]
         else:
-            confirmation = input(f"\n¿Ejecutar este comando? (y/N): ")
+            confirmation = input("\n" + t('commands.execute_command') + " ")
             return confirmation.lower() in ['y', 'yes', 'sí', 'si']
     
     def execute_command(self, command):
         """Ejecuta un comando de forma segura"""
         try:
-            print(f"\n{Fore.YELLOW}Ejecutando: {command}{Style.RESET_ALL}")
+            print("\n" + Fore.YELLOW + t('commands.executing') + " " + command + Style.RESET_ALL)
             
             # Ejecutar con shell para permitir expansión de globs y pipes
             result = subprocess.run(
@@ -50,11 +53,11 @@ class CommandHandler:
             )
             
             if result.stdout:
-                print(f"\n{Fore.GREEN}Salida:{Style.RESET_ALL}")
+                print("\n" + Fore.GREEN + t('commands.output') + Style.RESET_ALL)
                 print(result.stdout)
             
             if result.stderr and result.returncode != 0:
-                print(f"\n{Fore.RED}Error:{Style.RESET_ALL}")
+                print("\n" + Fore.RED + t('commands.error') + Style.RESET_ALL)
                 print(result.stderr)
             
             return {
@@ -65,10 +68,10 @@ class CommandHandler:
             }
             
         except subprocess.TimeoutExpired:
-            print(f"{Fore.RED}Error: El comando excedió el tiempo límite (30s){Style.RESET_ALL}")
+            print(Fore.RED + t('security.timeout_error') + Style.RESET_ALL)
             return {'success': False, 'error': 'Timeout'}
             
         except Exception as e:
-            print(f"{Fore.RED}Error ejecutando comando: {str(e)}{Style.RESET_ALL}")
+            print(Fore.RED + t('security.execution_error') + " " + str(e) + Style.RESET_ALL)
             return {'success': False, 'error': str(e)}
 
