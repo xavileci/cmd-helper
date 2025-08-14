@@ -71,7 +71,7 @@ class CommandHandler:
             print(Fore.RED + t('security.timeout_error') + Style.RESET_ALL)
             return {'success': False, 'error': 'Timeout'}
             
-        except Exception as e:
+        except OSError as e:
             print(Fore.RED + t('security.execution_error') + " " + str(e) + Style.RESET_ALL)
             return {'success': False, 'error': str(e)}
 
