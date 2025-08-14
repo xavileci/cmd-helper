@@ -1,64 +1,67 @@
-"""
-# Cmd Helper - Asistente Inteligente para Línea de Comandos
+# Cmd Helper - Intelligent Command Line Assistant
 
-Herramienta multiplataforma que te ayuda a generar y ejecutar comandos de shell usando lenguaje natural.
+A cross-platform tool that helps you generate and execute shell commands using natural language.
 
-## Instalación
+## Installation
 
-1. Clona o descarga el proyecto
-2. Instala dependencias:
+1. Clone or download the project
+2. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
-3. Configura tu API key de Google Gemini:
+
+3. Configure your Google Gemini API key:
+
    ```bash
-   export GEMINI_API_KEY='tu-api-key-aqui'
-   ```
-   O crea archivo `.env`:
-   ```
-   GEMINI_API_KEY=tu-api-key-aqui
+   export GEMINI_API_KEY='your-api-key-here'
    ```
 
-## Uso
+   Or create a `.env` file:
+
+   ```env
+   GEMINI_API_KEY=your-api-key-here
+   ```
+
+## Usage
 
 ```bash
-python main.py "listar archivos python modificados hoy"
-python main.py "encontrar archivos grandes en este directorio"
-python main.py "mostrar espacio en disco"
-python main.py "comprimir carpeta backup"
+python main.py "list python files modified today"
+python main.py "find large files in this directory"
+python main.py "show disk space"
+python main.py "compress backup folder"
 ```
 
-## Características
+## Features
 
-- ✅ Multiplataforma (Linux, macOS, Windows)
-- ✅ Análisis de contexto inteligente
-- ✅ Confirmación antes de ejecutar
-- ✅ Detección de comandos peligrosos
-- ✅ Integración con Git
-- ✅ Colores y formato amigable
+- ✅ Cross-platform (Linux, macOS, Windows)
+- ✅ Intelligent context analysis
+- ✅ Confirmation before execution
+- ✅ Dangerous command detection
+- ✅ Git integration
+- ✅ Friendly colors and formatting
 
-## Comandos de ejemplo
+## Example Commands
 
-| Petición | Comando generado |
-|----------|------------------|
-| "listar archivos python" | `find . -name "*.py" -type f` |
-| "archivos modificados hoy" | `find . -newermt "$(date +%Y-%m-%d)" -type f` |
-| "espacio en disco" | `df -h` |
-| "procesos que usan más CPU" | `top -n 1 -b \| head -20` |
+| Request | Generated Command |
+|---------|------------------|
+| "list python files" | `find . -name "*.py" -type f` |
+| "files modified today" | `find . -newermt "$(date +%Y-%m-%d)" -type f` |
+| "disk space" | `df -h` |
+| "processes using most CPU" | `top -n 1 -b \| head -20` |
 
-## Seguridad
+## Security
 
-- Confirmación obligatoria para comandos peligrosos
-- Timeout de 30 segundos para evitar comandos colgados
-- Exclusión automática de directorios sensibles
-- Parsing seguro de comandos
+- Mandatory confirmation for dangerous commands
+- 30-second timeout to prevent hanging commands
+- Automatic exclusion of sensitive directories
+- Safe command parsing
 
-## Desarrollo
+## Development
 
-Para contribuir o modificar:
+To contribute or modify:
 
-1. El contexto se analiza en `context_analyzer.py`
-2. La comunicación con OpenAI está en `mcp_server.py`
-3. La ejecución segura en `command_handler.py`
-4. La configuración en `config.py`
-"""
+1. Context analysis is handled in `context_analyzer.py`
+2. Communication with Gemini is in `mcp_server.py`
+3. Safe execution is in `command_handler.py`
+4. Configuration is in `config.py`
