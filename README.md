@@ -19,74 +19,102 @@ cmd-helper es una herramienta que convierte peticiones en lenguaje natural en co
 
 ## 🚀 Instalación Rápida / Quick Installation
 
-### Opción 1: Instalador Automático (Recomendado)
+### Opción 1: Instalador Global Robusto (Recomendado)
 
 ```bash
 # Clona el repositorio
 git clone https://github.com/your-username/cmd-helper.git
 cd cmd-helper
 
-# Ejecuta el instalador
+# Limpia instalaciones previas (opcional)
+./cleanup.sh
+
+# Ejecuta el instalador robusto
+./install-global.sh
+```
+
+### Opción 2: Instalador Básico (Entorno Virtual)
+
+```bash
+# Clona el repositorio
+git clone https://github.com/your-username/cmd-helper.git
+cd cmd-helper
+
+# Ejecuta el instalador básico
 ./install.sh
 ```
 
-### Opción 2: Instalación Manual
+### Opción 3: Instalación Manual
 
 ```bash
 # Clona el repositorio
 git clone https://github.com/your-username/cmd-helper.git
 cd cmd-helper
 
-# Instala usando pip
-pip install --user .
+# Actualiza dependencias críticas
+pip install --user --upgrade typing-extensions>=4.14.1
 
-# O para desarrollo
-pip install --user -e .
+# Instala el paquete
+pip install --user .
 ```
 
-### Opción 3: Usando pip directamente (cuando esté en PyPI)
+### Opción 4: Usando pip directamente (cuando esté en PyPI)
 
 ```bash
 pip install --user cmd-helper
+```
+
+### 🛠️ Resolución de Problemas
+
+Si encuentras errores de dependencias al instalar globalmente:
+
+```bash
+# Paso 1: Limpia instalaciones previas
+./cleanup.sh
+
+# Paso 2: Actualiza dependencias críticas
+python3 -m pip install --user --upgrade typing-extensions pydantic
+
+# Paso 3: Instala con el script robusto
+./install-global.sh
 ```
 
 ---
 
 ## ⚙️ Configuración / Configuration
 
-### Configurar API Keys
+### Configurar API Key de Gemini
 
-Para usar las funciones de IA, necesitas configurar al menos una API key:
+Para usar cmd-helper, necesitas configurar tu API key de Google Gemini:
 
-#### OpenAI
+#### Obtener API Key
+1. Ve a [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Crea una cuenta o inicia sesión
+3. Genera una nueva API key (es gratuita)
+
+#### Configurar la API Key
+
 ```bash
-export OPENAI_API_KEY="tu-api-key-aqui"
-```
-
-#### Anthropic (Claude)
-```bash
-export ANTHROPIC_API_KEY="tu-api-key-aqui"
+export GEMINI_API_KEY="tu-api-key-aqui"
 ```
 
 ### Archivo de Configuración
 
 Puedes crear un archivo `.env` en cualquiera de estas ubicaciones:
 - `~/.cmd-helper/.env`
-- `~/.config/cmd-helper/.env`
+- `~/.config/cmd-helper/.env`  
 - `./.env` (directorio actual)
 
 Ejemplo de `.env`:
 ```bash
-# API Keys
-OPENAI_API_KEY=tu-openai-key
-ANTHROPIC_API_KEY=tu-anthropic-key
+# API Key de Gemini
+GEMINI_API_KEY=tu-gemini-api-key
 
-# Configuración
-LANG=auto  # auto, es, en
-OPENAI_MODEL=gpt-4
-ANTHROPIC_MODEL=claude-3-sonnet-20240229
-API_TIMEOUT=30
-MAX_RETRIES=3
+# Configuración opcional
+CMD_HELPER_LANG=auto  # auto, es, en
+MODEL_NAME=gemini-2.5-flash
+MAX_TOKENS=1000
+TEMPERATURE=0.1
 ```
 
 ---

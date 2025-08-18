@@ -20,14 +20,18 @@ def read_requirements():
     req_path = os.path.join(os.path.dirname(__file__), "requirements.txt")
     if os.path.exists(req_path):
         with open(req_path, "r", encoding="utf-8") as f:
-            return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+            requirements = []
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and not line.startswith("pylint") and not line.startswith("black") and not line.startswith("flake8") and not line.startswith("isort"):
+                    requirements.append(line)
+            return requirements
     return [
-        "click>=8.0.0",
-        "colorama>=0.4.0",
-        "python-dotenv>=0.19.0",
-        "requests>=2.25.0",
-        "openai>=1.0.0",
-        "anthropic>=0.3.0"
+        "google-generativeai>=0.3.0",
+        "click>=8.1.0",
+        "colorama>=0.4.6",
+        "python-dotenv>=1.0.0",
+        "typing-extensions>=4.14.1"
     ]
 
 setup(

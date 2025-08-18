@@ -55,6 +55,8 @@ class CommandHandler:
                 shell=True,
                 capture_output=True,
                 text=True,
+                encoding='utf-8',
+                errors='replace',  # Reemplazar caracteres no válidos en lugar de fallar
                 timeout=30,  # Timeout de 30 segundos
                 check=False  # No raise exception on non-zero exit
             )

@@ -39,7 +39,10 @@
     "directory_error": "Cannot read directory:",
     "ai_generated_command": "AI generated command",
     "gemini_connection_error": "Error connecting to Gemini:",
-    "response_processing_error": "Error processing response:"
+    "response_processing_error": "Error processing response:",
+    "safety_filter_blocked": "Your request was blocked by safety filters. Try rephrasing your question more specifically.",
+    "recitation_blocked": "The response was blocked for containing copyrighted content.",
+    "empty_response": "No valid response received from the AI model."
   },
   "help": {
     "show_version": "Show version"

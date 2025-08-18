@@ -39,7 +39,10 @@
     "directory_error": "No se puede leer el directorio:",
     "ai_generated_command": "Comando generado por IA",
     "gemini_connection_error": "Error conectando con Gemini:",
-    "response_processing_error": "Error procesando respuesta:"
+    "response_processing_error": "Error procesando respuesta:",
+    "safety_filter_blocked": "Tu petición fue bloqueada por filtros de seguridad. Intenta reformular la pregunta de manera más específica.",
+    "recitation_blocked": "La respuesta fue bloqueada por contener contenido protegido por derechos de autor.",
+    "empty_response": "No se recibió una respuesta válida del modelo de IA."
   },
   "help": {
     "show_version": "Mostrar versión"

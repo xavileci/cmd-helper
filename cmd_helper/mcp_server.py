@@ -101,6 +101,39 @@ Contexto actual del sistema:"""
                 generation_config=generation_config
             )
 
+            # Verificar si la respuesta fue bloqueada por filtros de seguridad
+            if not response.candidates:
+                return {
+                    'command': None,
+                    'explanation': t("context.safety_filter_blocked"),
+                    'is_dangerous': False
+                }
+
+            candidate = response.candidates[0]
+            
+            # Verificar finish_reason
+            if hasattr(candidate, 'finish_reason'):
+                if candidate.finish_reason == 2:  # SAFETY
+                    return {
+                        'command': None,
+                        'explanation': t("context.safety_filter_blocked"),
+                        'is_dangerous': False
+                    }
+                elif candidate.finish_reason == 3:  # RECITATION
+                    return {
+                        'command': None,
+                        'explanation': t("context.recitation_blocked"),
+                        'is_dangerous': False
+                    }
+
+            # Verificar si hay texto válido en la respuesta
+            if not hasattr(response, 'text') or not response.text:
+                return {
+                    'command': None,
+                    'explanation': t("context.empty_response"),
+                    'is_dangerous': False
+                }
+
             return self._parse_response(response.text)
 
         except Exception as e:
