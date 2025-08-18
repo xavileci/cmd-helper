@@ -2,7 +2,8 @@
   "app": {
     "name": "Cmd Helper - AI Command Assistant",
     "description": "Intelligent command line assistant",
-    "version": "Cmd Helper v1.0.0"
+    "version": "Cmd Helper v1.0.0",
+    "usage": "Usage: cmd-helper \"your natural language request\"\nExample: cmd-helper \"list large files\""
   },
   "messages": {
     "analyzing_request": "🤖 Analyzing your request...",

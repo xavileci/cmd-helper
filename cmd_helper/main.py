@@ -8,10 +8,10 @@ Uso: python main.py "tu petición en lenguaje natural"
 import sys
 import click
 from colorama import Fore, Style, init
-from mcp_server import MCPServer
-from command_handler import CommandHandler
-from config import Config
-from i18n import t, get_translator
+from .mcp_server import MCPServer
+from .command_handler import CommandHandler
+from .config import Config
+from .i18n import t, get_translator
 
 # Inicializar colorama
 init(autoreset=True)
@@ -72,7 +72,7 @@ class CmdHelper:
 
 
 @click.command()
-@click.argument('request', required=True)
+@click.argument('request', required=False)
 @click.option('--version', is_flag=True, help='Show version / Mostrar versión')
 @click.option('--lang', type=click.Choice(['es', 'en', 'auto']), default='auto',
               help='Set language (es=Spanish, en=English, auto=detect)')
@@ -88,6 +88,11 @@ def main(request, version, lang):
 
     if version:
         print(t('app.version'))
+        return
+
+    if not request:
+        print(t('app.usage'))
+        return
         return
 
     # Mostrar banner

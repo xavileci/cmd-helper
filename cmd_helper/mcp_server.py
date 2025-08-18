@@ -8,9 +8,9 @@ shell commands based on natural language requests.
 
 import json
 import google.generativeai as genai
-from config import Config
-from context_analyzer import ContextAnalyzer
-from i18n import t, get_translator
+from .config import Config
+from .context_analyzer import ContextAnalyzer
+from .i18n import t, get_translator
 
 
 class MCPServer:

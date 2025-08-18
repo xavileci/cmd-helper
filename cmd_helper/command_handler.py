@@ -8,8 +8,8 @@ and security checks for potentially dangerous operations.
 
 import subprocess
 from colorama import Fore, Style, init
-from config import Config
-from i18n import t
+from .config import Config
+from .i18n import t
 
 # Inicializar colorama para multiplataforma
 init(autoreset=True)

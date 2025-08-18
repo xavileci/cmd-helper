@@ -10,8 +10,8 @@ import os
 import subprocess
 import platform
 from pathlib import Path
-from config import Config
-from i18n import t
+from .config import Config
+from .i18n import t
 
 
 class ContextAnalyzer:
