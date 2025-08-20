@@ -228,8 +228,74 @@ cmd-helper/
 - `colorama` - Colores en terminal
 - `python-dotenv` - Gestión de variables de entorno
 - `requests` - Peticiones HTTP
-- `openai` - Cliente OpenAI
-- `anthropic` - Cliente Anthropic
+- `google-generativeai` - Cliente Google Gemini
+
+---
+
+## 🧪 Testing y Calidad de Código / Testing and Code Quality
+
+### Ejecutar Tests
+
+El proyecto incluye una suite completa de tests con **88% de cobertura de código**:
+
+```bash
+# Ejecutar todos los tests
+pytest tests/
+
+# Ejecutar tests con reporte de cobertura
+pytest tests/ --cov=cmd_helper --cov-report=term
+
+# Ejecutar tests para SonarQube (genera reportes XML)
+./run_tests_sonar.sh
+```
+
+### Suite de Tests
+
+- **70 tests** cubriendo todos los módulos principales
+- **Tests unitarios** con mocking apropiado
+- **Tests de integración** para funcionalidad end-to-end
+- **Cobertura por módulo**:
+  - `config.py`: 100%
+  - `mcp_server.py`: 95%
+  - `command_handler.py`: 89%
+  - `main.py`: 89%
+  - `context_analyzer.py`: 82%
+  - `i18n.py`: 77%
+
+### SonarQube Integration
+
+El proyecto está configurado para análisis continuo de código con SonarQube:
+
+```bash
+# Ejecutar análisis local (requiere sonar-scanner)
+sonar-scanner
+
+# El pipeline de CI/CD ejecuta automáticamente:
+# - Tests con cobertura
+# - Análisis de calidad de código
+# - Detección de vulnerabilidades
+# - Métricas de mantenibilidad
+```
+
+### Archivos de Configuración
+
+- `sonar-project.properties` - Configuración de SonarQube
+- `pytest.ini` - Configuración de tests
+- `requirements-dev.txt` - Dependencias de desarrollo
+- `.github/workflows/sonar.yml` - Pipeline de CI/CD
+
+### Scripts de Desarrollo
+
+```bash
+# Ejecutar tests con reportes para SonarQube
+./run_tests_sonar.sh
+
+# Limpiar archivos temporales y de desarrollo
+./clean.sh
+
+# Ver reporte de cobertura HTML
+open htmlcov/index.html
+```
 
 ---
 

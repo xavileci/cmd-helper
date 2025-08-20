@@ -45,10 +45,24 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
+test-results.xml
 *.cover
 *.py.cover
 .hypothesis/
 .pytest_cache/
+
+# SonarQube reports and analysis
+.sonar/
+.scannerwork/
+sonar-report.json
+.sonarqube/
+
+# Testing artifacts
+junit.xml
+testmon.db
+.testmondata
+test_results/
+test-reports/
 cover/
 
 # Translations
@@ -56,7 +70,6 @@ cover/
 *.pot
 
 # Django stuff:
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -136,6 +149,10 @@ celerybeat.pid
 
 # Environments
 .env
+.env.local
+.env.development
+.env.production
+.env.test
 .envrc
 .venv
 env/
@@ -143,6 +160,21 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# cmd-helper specific files
+config.env
+.cmd-helper/
+cmd-helper.log
+*.log
+debug.log
+error.log
+
+# API keys and secrets (extra protection)
+*api_key*
+*secret*
+*token*
+.secrets
+credentials.json
 
 # Spyder project settings
 .spyderproject
@@ -173,7 +205,52 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+.idea/
+
+# Visual Studio Code
+.vscode/
+.vscode-server/
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.#*
+\#*#
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# OS generated files
+.directory
+desktop.ini
+
+# Archive files (often accidentally included)
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Development artifacts
+.scratch/
+.todo/
+notes.txt
+TODO.md
+NOTES.md
 
 # Abstra
 # Abstra is an AI-powered process automation framework.
