@@ -147,60 +147,70 @@ Contexto actual del sistema:"""
         """Parsea la respuesta de Gemini"""
         try:
             lines = response_text.strip().split('\n')
-            command = None
-            explanation = ""
-            is_dangerous = False
-
-            # Detectar idioma para parsear correctamente
-            # translator = get_translator()  # No se usa actualmente
-
-            # Palabras clave según el idioma
-            command_keywords = ['COMMAND:', 'COMANDO:']
-            explanation_keywords = ['EXPLANATION:', 'EXPLICACIÓN:']
-            danger_keywords = ['DANGER:', 'PELIGRO:']
-
-            for line in lines:
-                # Comando
-                if any(keyword in line for keyword in command_keywords):
-                    for keyword in command_keywords:
-                        if keyword in line:
-                            command = line.replace(keyword, '').strip()
-                            break
-
-                # Explicación
-                elif any(keyword in line for keyword in explanation_keywords):
-                    for keyword in explanation_keywords:
-                        if keyword in line:
-                            explanation = line.replace(keyword, '').strip()
-                            break
-
-                # Peligro
-                elif any(keyword in line for keyword in danger_keywords):
-                    for keyword in danger_keywords:
-                        if keyword in line:
-                            danger_text = line.replace(keyword, '').strip().upper()
-                            is_dangerous = (danger_text.startswith('YES') or
-                                          danger_text.startswith('SI'))
-                            break
-
-            # Si no encontramos formato estructurado, usar respuesta completa
-            if not command:
-                # Buscar líneas que parezcan comandos
-                for line in lines:
-                    if line.strip() and not line.startswith('#'):
-                        command = line.strip()
-                        explanation = t('context.ai_generated_command')
-                        break
-
-            return {
-                'command': command,
-                'explanation': explanation,
-                'is_dangerous': is_dangerous
-            }
-
+            parsed_data = self._extract_structured_data(lines)
+            
+            if not parsed_data['command']:
+                parsed_data['command'] = self._extract_fallback_command(lines)
+                if parsed_data['command']:
+                    parsed_data['explanation'] = t('context.ai_generated_command')
+        
+            return parsed_data
+        
         except Exception as e:
             return {
                 'command': None,
                 'explanation': t("context.response_processing_error") + " " + str(e),
                 'is_dangerous': False
             }
+
+    def _extract_structured_data(self, lines):
+        """Extrae datos estructurados de las líneas de respuesta"""
+        result = {
+            'command': None,
+            'explanation': "",
+            'is_dangerous': False
+        }
+        
+        for line in lines:
+            self._process_command_line(line, result)
+            self._process_explanation_line(line, result)
+            self._process_danger_line(line, result)
+        
+        return result
+
+    def _process_command_line(self, line, result):
+        """Procesa líneas que contienen comandos"""
+        command_keywords = ['COMMAND:', 'COMANDO:']
+        for keyword in command_keywords:
+            if keyword in line:
+                result['command'] = line.replace(keyword, '').strip()
+                return
+
+    def _process_explanation_line(self, line, result):
+        """Procesa líneas que contienen explicaciones"""
+        explanation_keywords = ['EXPLANATION:', 'EXPLICACIÓN:']
+        for keyword in explanation_keywords:
+            if keyword in line:
+                result['explanation'] = line.replace(keyword, '').strip()
+                return
+
+    def _process_danger_line(self, line, result):
+        """Procesa líneas que contienen información de peligro"""
+        danger_keywords = ['DANGER:', 'PELIGRO:']
+        for keyword in danger_keywords:
+            if keyword in line:
+                danger_text = line.replace(keyword, '').strip().upper()
+                result['is_dangerous'] = self._is_dangerous_response(danger_text)
+                return
+
+    def _is_dangerous_response(self, danger_text):
+        """Determina si la respuesta indica peligro"""
+        return danger_text.startswith('YES') or danger_text.startswith('SI')
+
+    def _extract_fallback_command(self, lines):
+        """Extrae comando como fallback cuando no hay formato estructurado"""
+        for line in lines:
+            stripped_line = line.strip()
+            if stripped_line and not stripped_line.startswith('#'):
+                return stripped_line
+        return None
