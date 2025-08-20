@@ -93,7 +93,6 @@ def main(request, version, lang):
     if not request:
         print(t('app.usage'))
         return
-        return
 
     # Mostrar banner
     print(Fore.CYAN + "=" * 50)
