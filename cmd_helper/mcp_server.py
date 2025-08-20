@@ -205,12 +205,45 @@ Contexto actual del sistema:"""
 
     def _is_dangerous_response(self, danger_text):
         """Determina si la respuesta indica peligro"""
-        return danger_text.startswith('YES') or danger_text.startswith('SI')
+        danger_upper = danger_text.upper()
+        return danger_upper.startswith('YES') or danger_upper.startswith('SI')
 
     def _extract_fallback_command(self, lines):
         """Extrae comando como fallback cuando no hay formato estructurado"""
+        # Palabras que indican texto explicativo, no comandos
+        explanation_words = ['aquí', 'tienes', 'comando', 'necesitas', 'este', 'esta', 'lista', 'filtra', 'archivo']
+        
         for line in lines:
             stripped_line = line.strip()
-            if stripped_line and not stripped_line.startswith('#'):
+            if not stripped_line or stripped_line.startswith('#'):
+                continue
+                
+            # Skip lines that look like explanations (contain too many explanation words)
+            lower_line = stripped_line.lower()
+            explanation_word_count = sum(1 for word in explanation_words if word in lower_line)
+            
+            # If the line has more than 2 explanation words, it's probably not a command
+            if explanation_word_count > 2:
+                continue
+                
+            # Check if it looks like a command (starts with common command words or has command-like structure)
+            command_indicators = ['ls', 'cd', 'mkdir', 'rm', 'cp', 'mv', 'cat', 'grep', 'find', 'chmod', 'sudo']
+            first_word = stripped_line.split()[0].lower() if stripped_line.split() else ''
+            
+            # If it starts with a command or has pipe/redirect symbols, it's likely a command
+            if (first_word in command_indicators or 
+                '|' in stripped_line or 
+                '>' in stripped_line or 
+                '<' in stripped_line or
+                stripped_line.startswith('./')):
                 return stripped_line
+                
+        # Fallback: return any non-explanation line
+        for line in lines:
+            stripped_line = line.strip()
+            if (stripped_line and 
+                not stripped_line.startswith('#') and 
+                not any(word in stripped_line.lower() for word in ['aquí', 'tienes', 'comando'])):
+                return stripped_line
+                
         return None

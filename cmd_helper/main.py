@@ -45,30 +45,34 @@ class CmdHelper:
 
     def process_request(self, user_input):
         """Procesa una petición del usuario"""
-        print(Fore.BLUE + t('messages.analyzing_request') + Style.RESET_ALL)
+        try:
+            print(Fore.BLUE + t('messages.analyzing_request') + Style.RESET_ALL)
 
-        # Generar comando usando MCP + Gemini
-        result = self.mcp_server.generate_command(user_input)
+            # Generar comando usando MCP + Gemini
+            result = self.mcp_server.generate_command(user_input)
 
-        if not result['command']:
-            print(Fore.RED + t('messages.no_command_generated') + Style.RESET_ALL)
-            if result['explanation']:
-                print(t('messages.reason') + " " + result['explanation'])
-            return
+            if not result['command']:
+                print(Fore.RED + t('messages.no_command_generated') + Style.RESET_ALL)
+                if result['explanation']:
+                    print(t('messages.reason') + " " + result['explanation'])
+                return
 
-        # Mostrar resultado y pedir confirmación
-        if self.command_handler.confirm_execution(result['command'], result['explanation']):
-            # Ejecutar comando
-            execution_result = self.command_handler.execute_command(result['command'])
+            # Mostrar resultado y pedir confirmación
+            if self.command_handler.confirm_execution(result['command'], result['explanation']):
+                # Ejecutar comando
+                execution_result = self.command_handler.execute_command(result['command'])
 
-            if execution_result['success']:
-                success_msg = t('messages.command_executed_successfully')
-                print("\n" + Fore.GREEN + success_msg + Style.RESET_ALL)
+                if execution_result['success']:
+                    success_msg = t('messages.command_executed_successfully')
+                    print("\n" + Fore.GREEN + success_msg + Style.RESET_ALL)
+                else:
+                    error_msg = t('messages.execution_error')
+                    print("\n" + Fore.RED + error_msg + Style.RESET_ALL)
             else:
-                error_msg = t('messages.execution_error')
-                print("\n" + Fore.RED + error_msg + Style.RESET_ALL)
-        else:
-            print(Fore.YELLOW + t('messages.operation_cancelled') + Style.RESET_ALL)
+                print(Fore.YELLOW + t('messages.operation_cancelled') + Style.RESET_ALL)
+                
+        except Exception as e:
+            print(Fore.RED + t('messages.unexpected_error') + " " + str(e) + Style.RESET_ALL)
 
 
 @click.command()

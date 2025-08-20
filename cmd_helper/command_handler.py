@@ -24,7 +24,22 @@ class CommandHandler:
     def is_command_dangerous(self, command):
         """Verifica si un comando es potencialmente peligroso"""
         command_lower = command.lower()
-        return any(dangerous in command_lower for dangerous in self.config.DANGEROUS_COMMANDS)
+        
+        # Verificar patrones básicos de la configuración
+        for dangerous in self.config.DANGEROUS_COMMANDS:
+            if dangerous in command_lower:
+                return True
+        
+        # Verificaciones adicionales más inteligentes
+        # Detectar chmod 777 con cualquier opción
+        if 'chmod' in command_lower and '777' in command_lower:
+            return True
+            
+        # Detectar sudo rm con cualquier opción
+        if 'sudo' in command_lower and 'rm' in command_lower:
+            return True
+            
+        return False
 
     def confirm_execution(self, command, explanation=""):
         """Pide confirmación al usuario antes de ejecutar"""

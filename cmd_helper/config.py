@@ -38,7 +38,7 @@ class Config:
 
     # Comandos peligrosos que siempre requieren confirmación extra
     DANGEROUS_COMMANDS = [
-        'rm -rf', 'sudo rm', 'chmod 777', 'mkfs', 'dd if=',
+        'rm -rf', 'sudo rm', 'chmod 777', 'chmod -r 777', 'mkfs', 'dd if=',
         'shutdown', 'reboot', 'halt', '> /dev/', 'format'
     ]
 
