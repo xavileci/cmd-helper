@@ -63,7 +63,7 @@ jobs:
           echo "✅ Report files found"
       
       - name: Upload coverage to SonarQube
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@v5.3.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
